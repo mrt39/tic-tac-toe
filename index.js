@@ -4,7 +4,7 @@ const Gameboard = (() => {
   let totalMoveCount = 0
   const boxesOccupiedByX = []
   const boxesOccupiedByO = []
-  const availableBoxes = []
+  const availableBoxes = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
   return {
     totalMoveCount,
     boxesOccupiedByX,
@@ -20,11 +20,11 @@ const playerFactory = (name) => {
 
   let sideX = true //which side, X or O. if X, this will return true.
 
-  const makeMove = boxNumber => {
+/*   const makeMove = boxNumber => {
     Gameboard.boxesOccupiedByX.push(boxNumber)
-  }; 
+  };  */
 
-  return { name, sideX, makeMove };
+  return { name, sideX };
 };
 
 //Create two player models, user and computer. their side will be decided by the user.
@@ -82,19 +82,88 @@ const allBoxes = document.querySelectorAll(".gameBox")
 allBoxes.forEach(function (box) {
   box.addEventListener("click", () => {
 
-    //if user is side X, fill the box with an X and record user's move into "boxesOccupiedByX" array
+    //variable for getting the number of the box user has clicked on
+    const boxNumber = box.dataset.display
+
+    //if the box user has pressed is not in the "availableBoxes" array, do nothing
+    const validMove = Gameboard.availableBoxes.indexOf(boxNumber);
+    if (validMove == -1){
+      return
+    }
+
+
+    //---------USER'S MOVE-------------
+    //if user is side X, fill the box's innerhtml with X 
     if (user.sideX === true){
-      box.innerHTML = "X";
+      makingMove("X", boxNumber)
     }
+    //if user is side O, fill the box's innerhtml with O 
     else{
-      box.innerHTML = "O";
+      makingMove("O", boxNumber)
     }
-    //record user's choice on the gameboard array
+
+    //checkWin function 
+    
+    //see if the move count has reached 9, if it did, end the game with a draw
 
 
-    //eliminate player's choice from the choices of boxes to fill
+    //---------COMPUTER'S MOVE-------------
+    //randomly choose an element from the "availableBoxes" array (which will have a box number for us).
+    const randomBoxNumber = Gameboard.availableBoxes[Math.floor(Math.random() * Gameboard.availableBoxes.length)];
+    console.log("computer chooses " + randomBoxNumber)
 
-    //randomly choose one from the rest of the available boxes and fill it for computer
+    //if computer is side X, fill the box's innerhtml with X
+    if (computer.sideX === true){
+      makingMove("X", randomBoxNumber)
+    }
+    //if computer is side O, fill the box's innerhtml with X
+    else{
+      makingMove("O", randomBoxNumber)
+    }
+    
+    
+    //checkWin function 
+
   });
 });
 
+
+
+
+//function for executing the moves of the players
+function makingMove(side, moveBoxNumber) {
+  //select the box element based on the number passed
+  const chosenBox = document.getElementById("box"+moveBoxNumber)
+
+  if (side === "X"){
+    //fill the box's innerhtml with X
+    chosenBox.innerHTML = "X";
+
+    //record user's move into "boxesOccupiedByX" array
+    Gameboard.boxesOccupiedByX.push(moveBoxNumber)
+    console.log("X boxes: " + Gameboard.boxesOccupiedByX)
+    //remove the box number from "availableBoxes" array
+    const index = Gameboard.availableBoxes.indexOf(moveBoxNumber);
+    Gameboard.availableBoxes.splice(index,1);
+    console.log("Available boxes: " + Gameboard.availableBoxes)
+    //increase the move count
+    Gameboard.totalMoveCount++
+    console.log("Move count: " + Gameboard.totalMoveCount)
+  }
+
+  else if (side === "O"){
+    //fill the box's innerhtml with O
+    chosenBox.innerHTML = "O";
+
+    //record the move into "boxesOccupiedByO" array
+    Gameboard.boxesOccupiedByO.push(moveBoxNumber)
+    console.log("O boxes: " + Gameboard.boxesOccupiedByO)
+    //remove the box number from "availableBoxes" array
+    const index = Gameboard.availableBoxes.indexOf(moveBoxNumber);
+    Gameboard.availableBoxes.splice(index,1);
+    console.log("Available boxes: " + Gameboard.availableBoxes)
+    //increase the move count
+    Gameboard.totalMoveCount++
+    console.log("Move count: " + Gameboard.totalMoveCount)
+  }
+}
