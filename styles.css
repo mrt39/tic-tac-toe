@@ -1,18 +1,60 @@
 html {
-  text-align: center;
-}
-
-* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   background-color:antiquewhite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+
+/* Fade-Out Effect */
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+
+/* Fade-In Effect */
+.visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 2s linear;
+}
+
+#pickingSidesContainer {
+  justify-content: center;
+    user-select: none;
+}
+
+#sides{
+  display: flex;
+  justify-content: center;
+}
+
+#header{
+  font-size: 50px;
+  margin-bottom: 30px;
+}
+
+#sideX,
+#sideO {
+  font-size: 90px;
+  cursor:pointer;
+}
+
+
+#sideX{
+  margin-right: 60px;
 }
 
 
 #numpadContainer {
   display: flex;
   justify-content: center;
+  height: max-content;
 }
 
 #wholeNumpad {
