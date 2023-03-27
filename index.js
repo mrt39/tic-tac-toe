@@ -64,13 +64,13 @@ bothSides.forEach(button => {
 
     //After user picks, selection div becomes invisible and gameboard becomes visible.
     pickingSideSection.className = "hidden";
-    gameBoardSection.className ="hidden";
-    setInterval(() => {
+
+    setTimeout(() => {
       pickingSideSection.style.display = "none";
     }, "500");
-    setInterval(() => {
+    setTimeout(() => {
       gameBoardSection.style.display = "block";
-      gameBoardSection.className ="visible";
+
     }, "500");
   
     //------DIFFICULTY SETTING-----
@@ -83,7 +83,16 @@ bothSides.forEach(button => {
 });
 
 
+//----------------------------RETURN BUTTON--------------------------------- 
+const returnButton = document.getElementById("returnButton")
 
+returnButton.addEventListener('click', function (){
+  gameBoardSection.className ="hidden";
+  setTimeout(() => {
+    location.reload()
+  }, "500");
+
+});
 
 
 
@@ -116,7 +125,10 @@ allBoxes.forEach(function (box) {
 
     //checkWin function 
     if (checkWin(user.playerSpaces) === true ){
-      document.querySelector("#gameResult").innerText = "User wins!"
+      //user wins. display the trophy icon
+      document.getElementById("gameEndSkull").style.display = "none";
+      document.getElementById("gameEndEqual").style.display = "none";
+      document.getElementById("gameEndTrophy").style.visibility = "visible";
       Gameboard.gameEnd = true
       return
     }
@@ -169,7 +181,10 @@ allBoxes.forEach(function (box) {
     
     //checkWin function 
     if (checkWin(computer.playerSpaces) === true ){
-      document.querySelector("#gameResult").innerText = "Computer wins!"
+      //computer wins. display the skull icon
+      document.getElementById("gameEndTrophy").style.display = "none";
+      document.getElementById("gameEndEqual").style.display = "none";
+      document.getElementById("gameEndSkull").style.visibility = "visible";      
       Gameboard.gameEnd = true
       return
     }
@@ -271,7 +286,10 @@ function checkWin(playerSpaces) {
 //function for draw, the only condition is reaching 9 moves 
 function checkDraw(){
   if (Gameboard.totalMoveCount === 9) {
-    document.querySelector("#gameResult").innerText = "Draw!"
+    //draw. display the equal icon
+    document.getElementById("gameEndTrophy").style.display = "none";
+    document.getElementById("gameEndSkull").style.display = "none";
+    document.getElementById("gameEndEqual").style.visibility = "visible";   
     Gameboard.gameEnd === true
     return
   }
