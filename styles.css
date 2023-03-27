@@ -50,6 +50,10 @@ html {
   margin-right: 60px;
 }
 
+.side:hover {
+  color: white;
+}
+
 
 #numpadContainer {
   display: flex;
@@ -99,7 +103,6 @@ html {
 
 .gameBox:hover {
   background-color: #efefef;
-
 }
 
 .gameBox:active {

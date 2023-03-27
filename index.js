@@ -19,12 +19,12 @@ const Gameboard = (() => {
 const playerFactory = (name) => {
 
   let sideX = true //which side, X or O. if X, this will return true.
-
+  const playerSpaces = []; //tracks which spaces on the board the user occupies
 /*   const makeMove = boxNumber => {
     Gameboard.boxesOccupiedByX.push(boxNumber)
   };  */
 
-  return { name, sideX };
+  return { name, sideX, playerSpaces };
 };
 
 //Create two player models, user and computer. their side will be decided by the user.
@@ -93,13 +93,14 @@ allBoxes.forEach(function (box) {
 
 
     //---------USER'S MOVE-------------
-    //if user is side X, fill the box's innerhtml with X 
+    //if user is side X, fill the box's innerhtml with X and record user's move into "playerSpaces" array
     if (user.sideX === true){
-      makingMove("X", boxNumber)
+      makingMove("X", boxNumber, "user")
+
     }
-    //if user is side O, fill the box's innerhtml with O 
+    //if user is side O, fill the box's innerhtml with O and record user's move into "playerSpaces" array
     else{
-      makingMove("O", boxNumber)
+      makingMove("O", boxNumber, "user")
     }
 
     //checkWin function 
@@ -114,11 +115,11 @@ allBoxes.forEach(function (box) {
 
     //if computer is side X, fill the box's innerhtml with X
     if (computer.sideX === true){
-      makingMove("X", randomBoxNumber)
+      makingMove("X", randomBoxNumber, "computer")
     }
     //if computer is side O, fill the box's innerhtml with X
     else{
-      makingMove("O", randomBoxNumber)
+      makingMove("O", randomBoxNumber, "computer")
     }
     
     
@@ -131,17 +132,15 @@ allBoxes.forEach(function (box) {
 
 
 //function for executing the moves of the players
-function makingMove(side, moveBoxNumber) {
+function makingMove(side, moveBoxNumber, playerName) {
   //select the box element based on the number passed
   const chosenBox = document.getElementById("box"+moveBoxNumber)
 
   if (side === "X"){
     //fill the box's innerhtml with X
     chosenBox.innerHTML = "X";
-
     //record user's move into "boxesOccupiedByX" array
     Gameboard.boxesOccupiedByX.push(moveBoxNumber)
-    console.log("X boxes: " + Gameboard.boxesOccupiedByX)
     //remove the box number from "availableBoxes" array
     const index = Gameboard.availableBoxes.indexOf(moveBoxNumber);
     Gameboard.availableBoxes.splice(index,1);
@@ -154,10 +153,8 @@ function makingMove(side, moveBoxNumber) {
   else if (side === "O"){
     //fill the box's innerhtml with O
     chosenBox.innerHTML = "O";
-
     //record the move into "boxesOccupiedByO" array
     Gameboard.boxesOccupiedByO.push(moveBoxNumber)
-    console.log("O boxes: " + Gameboard.boxesOccupiedByO)
     //remove the box number from "availableBoxes" array
     const index = Gameboard.availableBoxes.indexOf(moveBoxNumber);
     Gameboard.availableBoxes.splice(index,1);
@@ -165,5 +162,14 @@ function makingMove(side, moveBoxNumber) {
     //increase the move count
     Gameboard.totalMoveCount++
     console.log("Move count: " + Gameboard.totalMoveCount)
+  }
+
+  if (playerName ==="user"){
+    user.playerSpaces.push(moveBoxNumber)
+    console.log("Boxes occupied by user: " + user.playerSpaces)
+  }
+  else if (playerName ==="computer"){
+    computer.playerSpaces.push(moveBoxNumber)
+    console.log("Boxes occupied by Computer: " + computer.playerSpaces)
   }
 }
