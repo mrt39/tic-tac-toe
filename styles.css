@@ -136,6 +136,7 @@ option{
   align-items: center;
   cursor:pointer;
   user-select: none;
+  transition: color 1s ease;
 }
 
 .gameBox:hover {
@@ -156,3 +157,6 @@ option{
 #returnButton{
   cursor:pointer;
 }
+
+
+

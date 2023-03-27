@@ -250,33 +250,19 @@ function makingMove(side, moveBoxNumber, playerName) {
 
 
 // Function to check if a player has won
-function checkWin(playerSpaces) {
-  // Check rows
-  if (playerSpaces.includes(1) && playerSpaces.includes(2) && playerSpaces.includes(3)) {
-    return true;
-  }
-  if (playerSpaces.includes(4) && playerSpaces.includes(5) && playerSpaces.includes(6)) {
-    return true;
-  }
-  if (playerSpaces.includes(7) && playerSpaces.includes(8) && playerSpaces.includes(9)) {
-    return true;
-  }
-  // Check columns
-  if (playerSpaces.includes(1) && playerSpaces.includes(4) && playerSpaces.includes(7)) {
-    return true;
-  }
-  if (playerSpaces.includes(2) && playerSpaces.includes(5) && playerSpaces.includes(8)) {
-    return true;
-  }
-  if (playerSpaces.includes(3) && playerSpaces.includes(6) && playerSpaces.includes(9)) {
-    return true;
-  }
-  // Check diagonals
-  if (playerSpaces.includes(1) && playerSpaces.includes(5) && playerSpaces.includes(9)) {
-    return true;
-  }
-  if (playerSpaces.includes(3) && playerSpaces.includes(5) && playerSpaces.includes(7)) {
-    return true;
+function checkWin(playerMoves) {
+  const winningCombos = [    [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
+  [1, 4, 7], [2, 5, 8], [3, 6, 9], // columns
+  [1, 5, 9], [3, 5, 7] // diagonals
+  ];
+  //Check each winning combination
+  for (const combo of winningCombos) {
+    if (combo.every(move => playerMoves.includes(move))) {
+      document.getElementById("box"+combo[0]).style.color = "#6495ED";
+      document.getElementById("box"+combo[1]).style.color = "#6495ED";
+      document.getElementById("box"+combo[2]).style.color = "#6495ED";
+      return true;
+    }
   }
   return false;
 }
@@ -305,7 +291,7 @@ function blockPlayerWin(playerMoves) {
     [1, 5, 9], [3, 5, 7] // diagonals
   ];
 
-  // Check each winning combination
+  //Check each winning combination
   for (const combo of winningCombos) {
     const [a, b, c] = combo;
     if (playerMoves.includes(a) && playerMoves.includes(b) && Gameboard.availableBoxes.includes(c)) {
