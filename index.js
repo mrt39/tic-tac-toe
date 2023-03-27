@@ -3,7 +3,7 @@
 const Gameboard = (() => {
   let totalMoveCount = 0
   let gameEnd = false
-  let difficulty = "medium"
+  let difficulty = "hard"
   const boxesOccupiedByX = []
   const boxesOccupiedByO = []
   const availableBoxes = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -119,9 +119,31 @@ allBoxes.forEach(function (box) {
 
 
     //---------COMPUTER'S MOVE-------------
+    //if the difficulty is hard, 
+    if (Gameboard.difficulty === "hard"){
+      
+      //if it is possible for computer to win in 1 move, getWinningMove function decides computer's next move
+      if (getWinningMove(computer.playerSpaces) != null) {
+        var computerMoveBoxNumber = getWinningMove(computer.playerSpaces)
+      }
+      //if it is possible for user to win in 1 move, blockPlayerWin function decides computer's next move
+      else if(blockPlayerWin(user.playerSpaces) != null){
+        computerMoveBoxNumber = blockPlayerWin(user.playerSpaces)
+      }
+
+      // If the center is empty, take that move
+      else if (Gameboard.availableBoxes.includes(5)) {
+        computerMoveBoxNumber = 5;
+      }
+
+      //otherwise, make a random move
+      else {
+        computerMoveBoxNumber = Gameboard.availableBoxes[Math.floor(Math.random() * Gameboard.availableBoxes.length)];
+      }
+    }
     //if the difficulty is medium and it is possible for user to win in 1 move, blockPlayerWin function decides computer's next move
-    if (Gameboard.difficulty === "medium" && blockPlayerWin(user.playerSpaces) != null){
-      var computerMoveBoxNumber = blockPlayerWin(user.playerSpaces)
+    else if (Gameboard.difficulty === "medium" && blockPlayerWin(user.playerSpaces) != null){
+      computerMoveBoxNumber = blockPlayerWin(user.playerSpaces)
     }
     //if not, randomly choose an element from the "availableBoxes" array (which will have a box number for us).
     else {
@@ -264,6 +286,32 @@ function blockPlayerWin(playerMoves) {
       return b;
     }
     if (playerMoves.includes(b) && playerMoves.includes(c) && Gameboard.availableBoxes.includes(a)) {
+      return a;
+    }
+  }
+  
+  // Return null if no winning combination is found
+  return null;
+}
+
+
+// If the computer can win in the next move, make that move, activated in "hard" difficulty
+function getWinningMove(computerMoves) {
+  const winningCombos = [    [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
+    [1, 4, 7], [2, 5, 8], [3, 6, 9], // columns
+    [1, 5, 9], [3, 5, 7] // diagonals
+  ];
+
+  // Check each winning combination
+  for (const combo of winningCombos) {
+    const [a, b, c] = combo;
+    if (computerMoves.includes(a) && computerMoves.includes(b) && Gameboard.availableBoxes.includes(c)) {
+      return c;
+    }
+    if (computerMoves.includes(a) && computerMoves.includes(c) && Gameboard.availableBoxes.includes(b)) {
+      return b;
+    }
+    if (computerMoves.includes(b) && computerMoves.includes(c) && Gameboard.availableBoxes.includes(a)) {
       return a;
     }
   }
