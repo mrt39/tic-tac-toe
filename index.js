@@ -2,6 +2,7 @@
 //using a module for this because there will be only 1 gameboard
 const Gameboard = (() => {
   let totalMoveCount = 0
+  let gameEnd = false
   const boxesOccupiedByX = []
   const boxesOccupiedByO = []
   const availableBoxes = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
@@ -10,6 +11,7 @@ const Gameboard = (() => {
     boxesOccupiedByX,
     boxesOccupiedByO,
     availableBoxes,
+    gameEnd,
   };
 })();
 
@@ -104,8 +106,14 @@ allBoxes.forEach(function (box) {
     }
 
     //checkWin function 
+    if (checkWin(user.playerSpaces) === true ){
+      document.querySelector("#gameResult").innerText = "User wins!"
+      Gameboard.gameEnd = true
+      return
+    }
     
     //see if the move count has reached 9, if it did, end the game with a draw
+     checkDraw()
 
 
     //---------COMPUTER'S MOVE-------------
@@ -124,6 +132,11 @@ allBoxes.forEach(function (box) {
     
     
     //checkWin function 
+    if (checkWin(computer.playerSpaces) === true ){
+      document.querySelector("#gameResult").innerText = "Computer wins!"
+      Gameboard.gameEnd = true
+      return
+    }
 
   });
 });
@@ -133,6 +146,12 @@ allBoxes.forEach(function (box) {
 
 //function for executing the moves of the players
 function makingMove(side, moveBoxNumber, playerName) {
+
+  //if game has ended, do nothing
+  if (Gameboard.gameEnd === true){
+    return
+  }
+
   //select the box element based on the number passed
   const chosenBox = document.getElementById("box"+moveBoxNumber)
 
@@ -140,7 +159,7 @@ function makingMove(side, moveBoxNumber, playerName) {
     //fill the box's innerhtml with X
     chosenBox.innerHTML = "X";
     //record user's move into "boxesOccupiedByX" array
-    Gameboard.boxesOccupiedByX.push(moveBoxNumber)
+    Gameboard.boxesOccupiedByX.push(parseInt(moveBoxNumber))
     //remove the box number from "availableBoxes" array
     const index = Gameboard.availableBoxes.indexOf(moveBoxNumber);
     Gameboard.availableBoxes.splice(index,1);
@@ -154,7 +173,7 @@ function makingMove(side, moveBoxNumber, playerName) {
     //fill the box's innerhtml with O
     chosenBox.innerHTML = "O";
     //record the move into "boxesOccupiedByO" array
-    Gameboard.boxesOccupiedByO.push(moveBoxNumber)
+    Gameboard.boxesOccupiedByO.push(parseInt(moveBoxNumber))
     //remove the box number from "availableBoxes" array
     const index = Gameboard.availableBoxes.indexOf(moveBoxNumber);
     Gameboard.availableBoxes.splice(index,1);
@@ -165,11 +184,57 @@ function makingMove(side, moveBoxNumber, playerName) {
   }
 
   if (playerName ==="user"){
-    user.playerSpaces.push(moveBoxNumber)
+    user.playerSpaces.push(parseInt(moveBoxNumber))
     console.log("Boxes occupied by user: " + user.playerSpaces)
   }
   else if (playerName ==="computer"){
-    computer.playerSpaces.push(moveBoxNumber)
+    computer.playerSpaces.push(parseInt(moveBoxNumber))
     console.log("Boxes occupied by Computer: " + computer.playerSpaces)
   }
 }
+
+
+// Function to check if a player has won
+function checkWin(playerSpaces) {
+  // Check rows
+  if (playerSpaces.includes(1) && playerSpaces.includes(2) && playerSpaces.includes(3)) {
+    return true;
+  }
+  if (playerSpaces.includes(4) && playerSpaces.includes(5) && playerSpaces.includes(6)) {
+    return true;
+  }
+  if (playerSpaces.includes(7) && playerSpaces.includes(8) && playerSpaces.includes(9)) {
+    return true;
+  }
+  // Check columns
+  if (playerSpaces.includes(1) && playerSpaces.includes(4) && playerSpaces.includes(7)) {
+    return true;
+  }
+  if (playerSpaces.includes(2) && playerSpaces.includes(5) && playerSpaces.includes(8)) {
+    return true;
+  }
+  if (playerSpaces.includes(3) && playerSpaces.includes(6) && playerSpaces.includes(9)) {
+    return true;
+  }
+  // Check diagonals
+  if (playerSpaces.includes(1) && playerSpaces.includes(5) && playerSpaces.includes(9)) {
+    return true;
+  }
+  if (playerSpaces.includes(3) && playerSpaces.includes(5) && playerSpaces.includes(7)) {
+    return true;
+  }
+  return false;
+}
+
+
+
+//function for draw, the only condition is reaching 9 moves 
+function checkDraw(){
+  if (Gameboard.totalMoveCount === 9) {
+    document.querySelector("#gameResult").innerText = "Draw!"
+    Gameboard.gameEnd === true
+    return
+  }
+}
+
+

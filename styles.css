@@ -61,6 +61,11 @@ html {
   height: max-content;
 }
 
+#gameResult{
+  font-size: 45px;
+  margin-bottom: 50px;
+}
+
 #wholeNumpad {
   display: flex;
   flex-direction: column;
@@ -110,3 +115,4 @@ html {
   color:#5a5a5a
 
 }
+
