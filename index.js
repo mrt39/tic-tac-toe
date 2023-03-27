@@ -3,15 +3,17 @@
 const Gameboard = (() => {
   let totalMoveCount = 0
   let gameEnd = false
+  let difficulty = "medium"
   const boxesOccupiedByX = []
   const boxesOccupiedByO = []
-  const availableBoxes = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  const availableBoxes = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   return {
     totalMoveCount,
     boxesOccupiedByX,
     boxesOccupiedByO,
     availableBoxes,
     gameEnd,
+    difficulty,
   };
 })();
 
@@ -85,7 +87,7 @@ allBoxes.forEach(function (box) {
   box.addEventListener("click", () => {
 
     //variable for getting the number of the box user has clicked on
-    const boxNumber = box.dataset.display
+    const boxNumber = parseInt(box.dataset.display)
 
     //if the box user has pressed is not in the "availableBoxes" array, do nothing
     const validMove = Gameboard.availableBoxes.indexOf(boxNumber);
@@ -117,17 +119,22 @@ allBoxes.forEach(function (box) {
 
 
     //---------COMPUTER'S MOVE-------------
-    //randomly choose an element from the "availableBoxes" array (which will have a box number for us).
-    const randomBoxNumber = Gameboard.availableBoxes[Math.floor(Math.random() * Gameboard.availableBoxes.length)];
-    console.log("computer chooses " + randomBoxNumber)
-
+    //if the difficulty is medium and it is possible for user to win in 1 move, blockPlayerWin function decides computer's next move
+    if (Gameboard.difficulty === "medium" && blockPlayerWin(user.playerSpaces) != null){
+      var computerMoveBoxNumber = blockPlayerWin(user.playerSpaces)
+    }
+    //if not, randomly choose an element from the "availableBoxes" array (which will have a box number for us).
+    else {
+      computerMoveBoxNumber = Gameboard.availableBoxes[Math.floor(Math.random() * Gameboard.availableBoxes.length)];
+      console.log("computer chooses " + computerMoveBoxNumber)
+    }
     //if computer is side X, fill the box's innerhtml with X
     if (computer.sideX === true){
-      makingMove("X", randomBoxNumber, "computer")
+      makingMove("X", computerMoveBoxNumber, "computer")
     }
     //if computer is side O, fill the box's innerhtml with X
     else{
-      makingMove("O", randomBoxNumber, "computer")
+      makingMove("O", computerMoveBoxNumber, "computer")
     }
     
     
@@ -238,3 +245,29 @@ function checkDraw(){
 }
 
 
+
+
+// Function to block the player from winning, activated in "medium" difficulty.
+function blockPlayerWin(playerMoves) {
+  const winningCombos = [    [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
+    [1, 4, 7], [2, 5, 8], [3, 6, 9], // columns
+    [1, 5, 9], [3, 5, 7] // diagonals
+  ];
+
+  // Check each winning combination
+  for (const combo of winningCombos) {
+    const [a, b, c] = combo;
+    if (playerMoves.includes(a) && playerMoves.includes(b) && Gameboard.availableBoxes.includes(c)) {
+      return c;
+    }
+    if (playerMoves.includes(a) && playerMoves.includes(c) && Gameboard.availableBoxes.includes(b)) {
+      return b;
+    }
+    if (playerMoves.includes(b) && playerMoves.includes(c) && Gameboard.availableBoxes.includes(a)) {
+      return a;
+    }
+  }
+  
+  // Return null if no winning combination is found
+  return null;
+}
