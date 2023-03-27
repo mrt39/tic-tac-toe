@@ -3,7 +3,7 @@
 const Gameboard = (() => {
   let totalMoveCount = 0
   let gameEnd = false
-  let difficulty = "hard"
+  let difficulty = "easy"
   const boxesOccupiedByX = []
   const boxesOccupiedByO = []
   const availableBoxes = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -34,6 +34,8 @@ const playerFactory = (name) => {
 //Create two player models, user and computer. their side will be decided by the user.
 const user = playerFactory ("User");
 const computer = playerFactory ("Computer");
+
+
 
 
 
@@ -71,9 +73,14 @@ bothSides.forEach(button => {
       gameBoardSection.className ="visible";
     }, "500");
   
+    //------DIFFICULTY SETTING-----
+    //Store the selected element in a variable
+    var diff = document.getElementById("difficultySetting1");
+    var chosenDiff = diff.value;
+    console.log(chosenDiff)
+    Gameboard.difficulty = chosenDiff
   });
 });
-
 
 
 
@@ -171,6 +178,10 @@ allBoxes.forEach(function (box) {
 });
 
 
+
+
+
+//-------------------------FUNCTIONS-------------------------------
 
 
 //function for executing the moves of the players
