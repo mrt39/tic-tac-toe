@@ -54,11 +54,9 @@ bothSides.forEach(button => {
     //see which side  user has picked, arrange the "sideX" property within the computer and user objects according to that
     var buttoninnerHTML = this.innerHTML;   
     if (buttoninnerHTML === "X"){
-      console.log("User picked X");
       computer.sideX = false
     }
     else if (buttoninnerHTML === "O"){
-      console.log("User picked O");
       user.sideX = false
     }
 
@@ -77,7 +75,6 @@ bothSides.forEach(button => {
     //Store the selected element in a variable
     var diff = document.getElementById("difficultySetting1");
     var chosenDiff = diff.value;
-    console.log(chosenDiff)
     Gameboard.difficulty = chosenDiff
   });
 });
@@ -167,7 +164,6 @@ allBoxes.forEach(function (box) {
     //if not, randomly choose an element from the "availableBoxes" array (which will have a box number for us).
     else {
       computerMoveBoxNumber = Gameboard.availableBoxes[Math.floor(Math.random() * Gameboard.availableBoxes.length)];
-      console.log("computer chooses " + computerMoveBoxNumber)
     }
     //if computer is side X, fill the box's innerhtml with X
     if (computer.sideX === true){
@@ -218,10 +214,8 @@ function makingMove(side, moveBoxNumber, playerName) {
     //remove the box number from "availableBoxes" array
     const index = Gameboard.availableBoxes.indexOf(moveBoxNumber);
     Gameboard.availableBoxes.splice(index,1);
-    console.log("Available boxes: " + Gameboard.availableBoxes)
     //increase the move count
     Gameboard.totalMoveCount++
-    console.log("Move count: " + Gameboard.totalMoveCount)
   }
 
   else if (side === "O"){
@@ -232,19 +226,15 @@ function makingMove(side, moveBoxNumber, playerName) {
     //remove the box number from "availableBoxes" array
     const index = Gameboard.availableBoxes.indexOf(moveBoxNumber);
     Gameboard.availableBoxes.splice(index,1);
-    console.log("Available boxes: " + Gameboard.availableBoxes)
     //increase the move count
     Gameboard.totalMoveCount++
-    console.log("Move count: " + Gameboard.totalMoveCount)
   }
 
   if (playerName ==="user"){
     user.playerSpaces.push(parseInt(moveBoxNumber))
-    console.log("Boxes occupied by user: " + user.playerSpaces)
   }
   else if (playerName ==="computer"){
     computer.playerSpaces.push(parseInt(moveBoxNumber))
-    console.log("Boxes occupied by Computer: " + computer.playerSpaces)
   }
 }
 
